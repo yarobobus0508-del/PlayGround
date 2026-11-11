@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>body{margin:0;background:#111}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+</head><body><script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const r=new THREE.WebGLRenderer({antialias:true});r.setSize(innerWidth,innerHeight);r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.1;document.body.appendChild(r.domElement);
+const s=new THREE.Scene();s.background=new THREE.Color(0x232833);
+const c=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,0.1,100);
+s.add(new THREE.HemisphereLight(0xffffff,0x333344,2.5));const d=new THREE.DirectionalLight(0xffffff,3);d.position.set(4,8,6);s.add(d);
+s.add(new THREE.GridHelper(10,10,0x444444,0x222222));
+const loader=new GLTFLoader();
+const urls=['/assets/models/sportbike.glb','/assets/models/sportbike2.glb'];
+window.models=[];
+for (let i=0;i<urls.length;i++){
+ loader.load(urls[i],gl=>{ const sc=gl.scene; sc.updateMatrixWorld(true);
+ const box=new THREE.Box3().setFromObject(sc), size=new THREE.Vector3(), ctr=new THREE.Vector3();box.getSize(size);box.getCenter(ctr);
+ sc.position.sub(ctr); sc.position.x += i*3-1.5; s.add(sc);
+ const info={url:urls[i],size:size.toArray()};
+ info.meshes=[]; sc.traverse(o=>{if(o.isMesh){const bb=new THREE.Box3().setFromObject(o);const sz=new THREE.Vector3();bb.getSize(sz);const cc=new THREE.Vector3();bb.getCenter(cc);info.meshes.push({name:o.name,parent:o.parent.name,mat:o.material?.name,sz:sz.toArray().map(n=>+n.toFixed(2)),c:cc.toArray().map(n=>+n.toFixed(2)),col:o.material?.color?.getHexString()})}});
+ window.models.push(info);
+});
+}
+c.position.set(0,1.6,8);c.lookAt(0,0.4,0);
+window.addEventListener('resize',()=>{c.aspect=innerWidth/innerHeight;c.updateProjectionMatrix();r.setSize(innerWidth,innerHeight)});
+function loop(){requestAnimationFrame(loop);r.render(s,c);}loop();
+</script></body></html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#080b12" />
+<title>APEX GP — Мотогонки</title>
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="./styles.css" />
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three/three.module.js",
+  "three/addons/": "./vendor/three/addons/"
+} }
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="scene"></canvas>
+  <div class="vignette"></div>
+  <div id="speedfx" class="speedfx"></div>
+
+  <!-- ======== LOADING ======== -->
+  <div id="loading" class="screen loading">
+    <div class="load-logo"><span>APEX</span> GP</div>
+    <div class="load-bar"><div id="loadFill"></div></div>
+    <div class="load-text" id="loadText">ЗАГРУЗКА МОТОЦИКЛОВ…</div>
+    <div class="load-tip">СОВЕТ: НАЖМИТЕ SHIFT ДЛЯ НИТРО НА ПРЯМЫХ</div>
+  </div>
+
+  <!-- ======== MENU ======== -->
+  <div id="menu" class="screen menu hidden">
+    <header class="menu-header">
+      <div class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 44 32" aria-hidden="true"><path d="M2 30 L15 2 L24 18 L33 2 L42 30 L32 30 L29 22 L24 30 L19 22 L12 30 Z"/></svg>
+        </div>
+        <div class="logo-type"><b>APEX</b><i>GP</i></div>
+      </div>
+      <div class="season-pill"><span>СЕЗОН 2026</span><b id="headerPts">0 ОЧКОВ</b></div>
+      <div class="header-buttons">
+        <button id="soundBtn" class="icon-btn" aria-label="Звук">
+          <svg viewBox="0 0 24 24" class="ico-on"><path d="M4 9v6h4l5 4V5L8 9H4zm11.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM13 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+          <svg viewBox="0 0 24 24" class="ico-off"><path d="M4 9v6h4l5 4V5L8 9H4zm14.6 3 2.2-2.2-1.4-1.4L17.2 10.6 15 8.4l-1.4 1.4 2.2 2.2-2.2 2.2 1.4 1.4 2.2-2.2 2.2 2.2 1.4-1.4z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="menu-hero">
+      <div class="kicker"><span></span>МИРОВОЙ ЧЕМПИОНАТ · 3 РАУНДА</div>
+      <h1>МОТО<span>ГОНКИ</span></h1>
+      <p class="hero-sub">Три трассы. Шесть гонщиков. Один титул.<br>Держи газ, ловите апекс, побеждай ботов.</p>
+      <div class="hero-cta">
+        <button id="startBtn" class="btn primary"><span id="startLabel">НАЧАТЬ ЧЕМПИОНАТ</span><i>→</i></button>
+        <button id="quickBtn" class="btn ghost">БЫСТРЫЙ ЗАЕЗД</button>
+      </div>
+      <div class="best-strip" id="bestStrip"></div>
+    </section>
+
+    <aside class="rounds-panel">
+      <div class="rounds-head"><span>РАУНДЫ</span><em id="seasonPoints">0 ОЧКОВ</em></div>
+      <div id="roundList" class="round-list"></div>
+      <button id="resetBtn" class="reset-link">СБРОСИТЬ СЕЗОН</button>
+    </aside>
+
+    <footer class="menu-footer">
+      <div class="garage">
+        <div class="mini-label">ГАРАЖ · ВЫБЕРИ БОЛИД</div>
+        <div id="bikeOptions" class="bike-options"></div>
+      </div>
+      <div class="controls-hint">
+        <div class="mini-label">УПРАВЛЕНИЕ</div>
+        <div class="keys">
+          <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> газ / руль</span>
+          <span><kbd>SHIFT</kbd> нитро</span>
+          <span><kbd>ESC</kbd> пауза</span>
+        </div>
+      </div>
+      <div class="credits">
+        <div class="mini-label">3D МОДЕЛИ</div>
+        <div>«Motorcycle» — Tahseen · «motor bike Aeron M2» — harway<br><span>Sketchfab · CC Attribution</span></div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ======== HUD ======== -->
+  <div id="hud" class="hud hidden">
+    <div class="hud-top">
+      <div class="hud-pos panel">
+        <div class="pos-line"><span id="posNum">6</span><em id="posOf">/ 6</em></div>
+        <div class="hud-caption">МЕСТО</div>
+      </div>
+      <div class="hud-lap panel">
+        <div class="hud-caption" id="roundLabel">HARBOR SPRINT</div>
+        <div class="lap-line"><b id="lapText">КРУГ 1 / 2</b><span id="raceTime">00:00.0</span></div>
+        <div class="lap-times"><span id="lastLap">ПОСЛ. —</span><span id="bestLap">ЛУЧШ. —</span></div>
+      </div>
+      <div class="hud-board panel">
+        <div class="hud-caption">ГОНКА</div>
+        <div id="leaderboard" class="board-list"></div>
+      </div>
+    </div>
+
+    <div id="banner" class="banner"></div>
+    <div id="countdown" class="countdown"></div>
+    <div id="message" class="message"></div>
+    <div id="wrongWay" class="wrong-way">НЕПРАВИЛЬНОЕ НАПРАВЛЕНИЕ</div>
+
+    <div class="hud-bottom">
+      <div class="mini-wrap panel">
+        <canvas id="minimap" width="340" height="340"></canvas>
+        <div class="mini-tag" id="miniTag">HARBOR</div>
+      </div>
+      <div class="speedo">
+        <div class="nitro-wrap">
+          <div class="nitro-label">N2O</div>
+          <div class="nitro-bar"><div id="nitroFill"></div></div>
+        </div>
+        <div class="speedo-ring">
+          <svg viewBox="0 0 220 220">
+            <defs>
+              <linearGradient id="speedGrad" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0" stop-color="#ff4d0a" />
+                <stop offset="0.55" stop-color="#ff8a25" />
+                <stop offset="1" stop-color="#ffe08a" />
+              </linearGradient>
+            </defs>
+            <circle class="speedo-bg" cx="110" cy="110" r="92" />
+            <circle id="speedoArc" class="speedo-arc" cx="110" cy="110" r="92" />
+            <g id="speedoTicks"></g>
+          </svg>
+          <div class="speedo-value">
+            <span id="speedVal">0</span>
+            <small>KM/H</small>
+          </div>
+          <div class="gear-box"><span id="gearVal">1</span><small>ПЕРЕДАЧА</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud-hint" id="hudHint">SHIFT — НИТРО · ESC — ПАУЗА</div>
+    <button id="pauseBtn" class="race-pause" aria-label="Пауза">II</button>
+  </div>
+
+  <!-- ======== TOUCH ======== -->
+  <div id="touch" class="touch hidden">
+    <div class="touch-steer">
+      <button data-act="left" class="tbtn steer">◀</button>
+      <button data-act="right" class="tbtn steer">▶</button>
+    </div>
+    <div class="touch-drive">
+      <button data-act="nitro" class="tbtn nitro">N2O</button>
+      <button data-act="brake" class="tbtn brake">ТОРМОЗ</button>
+      <button data-act="throttle" class="tbtn gas">ГАЗ</button>
+    </div>
+  </div>
+
+  <!-- ======== PAUSE ======== -->
+  <div id="pause" class="screen pause hidden">
+    <div class="dialog">
+      <div class="kicker"><span></span>ДВИГАТЕЛЬ НА ПАУЗЕ</div>
+      <h2>ПАУЗА</h2>
+      <div class="dialog-buttons">
+        <button id="resumeBtn" class="btn primary">ПРОДОЛЖИТЬ</button>
+        <button id="restartBtn" class="btn ghost">ЗАНОВО</button>
+        <button id="quitBtn" class="btn ghost">В МЕНЮ</button>
+      </div>
+      <div class="dialog-controls">
+        <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> управление</span>
+        <span><kbd>SHIFT</kbd> нитро</span>
+        <span><kbd>SPACE</kbd> тормоз</span>
+        <span><kbd>R</kbd> заново</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== RESULTS ======== -->
+  <div id="results" class="screen results hidden">
+    <div class="results-panel">
+      <div class="kicker"><span></span><em id="resultKicker">РАУНД 1 / 3 · ФИНИШ</em></div>
+      <div class="result-hero">
+        <div class="result-place" id="resultPlace">P1</div>
+        <div class="result-info">
+          <h2 id="resultTitle">ПОБЕДА</h2>
+          <p id="resultSub">HARBOR SPRINT · 2 КРУГА</p>
+          <div class="result-stats" id="resultStats"></div>
+        </div>
+        <div class="result-points"><b id="resultPts">+25</b><span>ОЧКОВ</span></div>
+      </div>
+      <div class="result-table" id="resultTable"></div>
+      <div class="dialog-buttons center">
+        <button id="nextBtn" class="btn primary">СЛЕДУЮЩИЙ РАУНД <i>→</i></button>
+        <button id="retryBtn" class="btn ghost">ЗАЕЗД ЗАНОВО</button>
+        <button id="menuBtn" class="btn ghost">В МЕНЮ</button>
+      </div>
+      <div class="champ-note" id="champNote"></div>
+    </div>
+  </div>
+
+  <!-- ======== CHAMPION ======== -->
+  <div id="champion" class="screen champion hidden">
+    <div class="trophy">🏆</div>
+    <div class="kicker"><span></span>СЕЗОН 2026 ЗАВЕРШЁН</div>
+    <h2 id="champTitle">ЧЕМПИОН</h2>
+    <p id="champSub">Вы выиграли титул APEX GP</p>
+    <div class="champ-table" id="champTable"></div>
+    <div class="dialog-buttons center">
+      <button id="newSeasonBtn" class="btn primary">НОВЫЙ СЕЗОН</button>
+      <button id="champMenuBtn" class="btn ghost">В МЕНЮ</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
