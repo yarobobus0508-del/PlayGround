@@ -237,7 +237,7 @@ export function createBikeVisual(template, opts = {}) {
   }
 
   return {
-    root, lean, model, rider, accent, glow, flame, headlight, tag,
+    root, lean, model, rider, accent, glow, flame, flameGlow, headlight, tag,
     setPose(leanAngle, pitch, bob) {
       this.lean.rotation.z = leanAngle;
       this.lean.rotation.x = pitch;
