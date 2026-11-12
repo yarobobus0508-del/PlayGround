@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#071b26" />
+  <title>Vice City: Wild Tides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="game-shell">
+    <canvas id="game"></canvas>
+    <div class="vignette"></div>
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">V</div><div><strong>VICE CITY</strong><small>WILD TIDES</small></div></div>
+      <div class="location"><span class="live-dot"></span><span id="district">OCEAN DRIVE</span><i>•</i><span id="clock">17:42</span></div>
+      <button id="map-toggle" class="icon-button" aria-label="Toggle map"><span class="map-icon">⌖</span></button>
+    </header>
+    <section class="mission-card" id="mission-card">
+      <div class="eyebrow"><span class="mission-icon">✦</span> STORY MISSION <span class="mission-number">01 / 04</span></div>
+      <h1 id="mission-title">A little <em>detour</em></h1>
+      <p id="mission-copy">Meet Rio by the marina. The city is yours until sunset.</p>
+      <div class="mission-progress"><span id="mission-progress"></span></div>
+      <div class="mission-foot"><span id="mission-state">WAYPOINT SET</span><span id="mission-distance">1.2 KM</span></div>
+    </section>
+    <div class="minimap-frame"><div class="mini-label">VICE COUNTY <span>NE</span></div><canvas id="minimap" width="224" height="224"></canvas><div class="mini-bottom"><span>◉ YOUR POSITION</span><span id="mini-area">CITY</span></div></div>
+    <section class="hud-bottom">
+      <div class="character-card"><div class="portrait"><span>LU</span><b>●</b></div><div class="character-info"><strong>LUCIA</strong><span>THE SUNSHINE STATE</span></div><div class="health"><span class="health-label">VITALS</span><div class="health-track"><i></i></div></div></div>
+      <div class="weapon-card"><div class="weapon-symbol">⌁</div><div><small>UTILITY</small><strong>UNARMED</strong></div><span class="ammo">∞</span></div>
+    </section>
+    <div class="vehicle-hud" id="vehicle-hud"><small>VEHICLE</small><strong>COASTLINE GT</strong><div class="speed"><span id="speed">00</span><small>MPH</small></div><div class="speed-track"><i id="speed-bar"></i></div></div>
+    <div class="wanted" id="wanted"><span>WANTED</span><div class="stars"><i>★</i><i>★</i><i>★</i><i>★</i><i>★</i></div></div>
+    <div id="prompt" class="prompt"><kbd>E</kbd><span>ENTER VEHICLE</span></div>
+    <div id="toast" class="toast"></div>
+    <div class="controls-hint"><span>W A S D <i>MOVE</i></span><b>·</b><span>SHIFT <i>SPRINT</i></span><b>·</b><span>E <i>INTERACT</i></span><b>·</b><span>F <i>FLARE</i></span><b>·</b><span>DRAG <i>LOOK</i></span></div>
+    <div class="intro" id="intro">
+      <div class="intro-glow"></div><div class="intro-content">
+        <div class="intro-kicker"><span></span> A SUNSHINE STATE OF MIND</div>
+        <h2>VICE<br><em>COUNTY</em></h2>
+        <p>One city. A thousand ways to get lost.</p>
+        <button id="start-button"><span>ENTER THE CITY</span><b>↗</b></button>
+        <div class="intro-note">A SMALL OPEN-WORLD ADVENTURE <span>•</span> 1986, ALL OVER AGAIN</div>
+      </div>
+      <div class="intro-side"><span>25°46′ N</span><i></i><span>80°12′ W</span></div>
+    </div>
+    <div class="pause-chip" id="pause-chip">PAUSED <span>CLICK TO RESUME</span></div>
+    <div class="mobile-controls" id="mobile-controls"><div class="touch-pad"><button data-key="w">▲</button><div><button data-key="a">◀</button><button data-key="s">▼</button><button data-key="d">▶</button></div></div><div class="touch-actions"><button data-key="shift">RUN</button><button data-key="e">USE</button><button data-key="f">FLARE</button></div></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
