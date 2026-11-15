@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#101513" />
+  <title>CRASH//LAB — симулятор столкновений</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="game">
+    <canvas id="scene" aria-label="3D игровая сцена"></canvas>
+    <div class="vignette"></div>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="CRASH LAB"><span class="brand-mark">C<span>×</span></span><span class="brand-name">CRASH<span>//</span>LAB<small>SOFT BODY TESTING</small></span></a>
+      <div class="location-pill"><i></i><span id="locationLabel">ПОЛИГОН</span><b>FREE ROAM</b></div>
+      <button class="icon-btn" id="soundBtn" aria-label="Звук" title="Звук">♫</button>
+    </header>
+    <section class="hud">
+      <div class="speed-card glass"><div class="speed-row"><strong id="speed">000</strong><span>КМ/Ч</span></div><div class="gear-row"><b id="gear">D</b><span>ПЕРЕДАЧА</span><span class="separator">/</span><span id="rpm">0.8</span><span>×1000 RPM</span></div><div class="speed-track"><i id="speedFill"></i></div></div>
+      <div class="damage-card glass"><div class="damage-head"><span>СОСТОЯНИЕ КУЗОВА</span><strong id="damageValue">0%</strong></div><div class="damage-track"><i id="damageFill"></i></div><div class="damage-foot"><span class="status-dot"></span><span id="damageStatus">ВСЁ В ПОРЯДКЕ</span><span class="impact-count"><b id="impactCount">0</b> УДАРОВ</span></div></div>
+      <div class="objective glass"><span class="target-icon">✳</span><div><b>СВОБОДНЫЙ ЗАЕЗД</b><small>ПРОВЕРЬ МАШИНУ НА ПРОЧНОСТЬ</small></div></div>
+    </section>
+    <div class="bottom-left"><div class="mini-map glass"><div class="map-cross"></div><div class="map-dot"></div><span>N</span></div><div class="map-label"><span id="mapName">ТЕСТОВЫЙ ПОЛИГОН</span><small>ОТКРЫТЫЙ МИР · 4.2 КМ²</small></div></div>
+    <div class="bottom-right"><button class="reset-btn glass" id="resetBtn"><span>↻</span>СБРОС МАШИНЫ <kbd>R</kbd></button><button class="menu-btn glass" id="menuBtn">☰</button></div>
+    <div class="mobile-controls" id="mobileControls">
+      <div class="steer-controls"><button data-control="left" aria-label="Влево">‹</button><button data-control="right" aria-label="Вправо">›</button></div>
+      <div class="pedal-controls"><button class="brake" data-control="brake"><span>ТОРМОЗ</span><b>◀</b></button><button class="gas" data-control="gas"><span>ГАЗ</span><b>▲</b></button></div>
+    </div>
+    <div class="toast" id="toast">МАШИНА ВОССТАНОВЛЕНА</div>
+    <section class="start-screen" id="startScreen">
+      <div class="start-grid"></div><div class="start-copy"><div class="eyebrow"><span></span> ФИЗИЧЕСКАЯ ПЕСОЧНИЦА · 01 / 04</div><h1>ПРОВЕРЬ<br><em>ГРАНИЦЫ.</em></h1><p>Свободное вождение. Жёсткие столкновения.<br>Только ты, машина и полигон.</p><div class="start-actions"><button class="primary-btn" id="startBtn">НАЧАТЬ ЗАЕЗД <span>↗</span></button><div class="key-hint">WASD <span>ДВИЖЕНИЕ</span><i></i> SPACE <span>РУЧНИК</span></div></div><div class="feature-row"><div><b>01</b><span>МЯТАЯ<br>ГЕОМЕТРИЯ</span></div><div><b>02</b><span>4 УНИКАЛЬНЫЕ<br>ЛОКАЦИИ</span></div><div><b>03</b><span>ДЕТАЛЬНЫЙ<br>АВТОПАРК</span></div></div></div>
+      <div class="start-car-label"><span class="label-line"></span><div><b id="carNamePreview">VORTEX S4</b><small>ПОЛНОПРИВОДНОЕ КУПЕ · 2024</small></div><span class="label-number">04<span>/</span>12</span></div>
+      <button class="close-start" id="closeStart" aria-label="Закрыть">×</button>
+    </section>
+    <section class="garage-panel glass" id="garagePanel"><div class="panel-heading"><div><span class="eyebrow">НАСТРОЙ СВОЙ ЗАЕЗД</span><h2>ГАРАЖ <span>И ЛОКАЦИЯ</span></h2></div><button id="closeGarage">×</button></div><div class="selector-block"><div class="select-title"><span>01</span> ВЫБЕРИ МАШИНУ</div><div class="car-list" id="carList"></div></div><div class="selector-block"><div class="select-title"><span>02</span> ВЫБЕРИ ЛОКАЦИЮ</div><div class="location-list" id="locationList"></div></div><button class="primary-btn panel-drive" id="driveBtn">ВЫЕХАТЬ НА ПОЛИГОН <span>↗</span></button><div class="panel-note">ПОВРЕЖДЕНИЯ ДЕФОРМИРУЮТ КУЗОВ В ТОЧКЕ УДАРА</div></section>
+    <div class="damage-flash" id="damageFlash"></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
