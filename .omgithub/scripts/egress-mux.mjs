@@ -1,5 +1,5 @@
 // Front CONNECT mux for phone-first egress: device allowlist hosts go to the
-// device relay; everything else prefers the general proxy (WARP / DataImpulse)
+// device relay; everything else prefers the general WARP proxy
 // when one is configured. models.opencode.ai never uses the phone — with no
 // general proxy it is connected directly (runner network).
 import { createServer, request as httpRequest } from 'node:http'

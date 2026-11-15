@@ -2,7 +2,7 @@
 // 1. `session.context`: keep only the newest KEEP images in the request history; older
 //    screenshots become a short text note. The transform is a pure function of history, so
 //    the prompt prefix only changes when a new image arrives (limits provider cache misses).
-// 2. `shell.create.before`: bash-tool children never inherit the CI residential proxy env.
+// 2. `shell.create.before`: bash-tool children never inherit the CI proxy env.
 export const KEEP = Number(process.env.OMGITHUB_KEEP_IMAGES || 2)
 export const NOTE = '[older screenshot removed to save context; take a new one if needed]'
 export const PROXY_VARS = ['HTTPS_PROXY', 'HTTP_PROXY', 'ALL_PROXY', 'https_proxy', 'http_proxy', 'all_proxy']

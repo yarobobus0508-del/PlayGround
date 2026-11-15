@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Compose phone-first egress: front mux over device relay (+ optional WARP/DataImpulse).
+# Compose phone-first egress: front mux over device relay (+ optional WARP).
 # Usage: compose-egress-proxy.sh <work-dir> <device-proxy-url> [general-proxy-url]
 # Prints http://127.0.0.1:PORT on stdout (last line). models.opencode.ai never uses the device.
 set -uo pipefail
